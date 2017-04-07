@@ -1,0 +1,5 @@
+Removed Pin From Net: NetName=C\S\ Pin=IC7-36
+Added Pin To Net: NetName=C\S\ Pin=IC7-27
+Added Room: Name=Designator
+Added Room: Name=Designator
+Added Room: Name=Sheet1

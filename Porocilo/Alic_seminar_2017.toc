@@ -1,0 +1,30 @@
+\select@language {slovene}
+\contentsline {section}{\numberline {1}Uvod}{2}
+\contentsline {section}{\numberline {2}Zahteve}{2}
+\contentsline {section}{\numberline {3}Dolo"canje elementov}{2}
+\contentsline {subsection}{\numberline {3.1}Mikrokrmilnik}{2}
+\contentsline {subsection}{\numberline {3.2}Komunikacijski pretvornik}{2}
+\contentsline {subsection}{\numberline {3.3}Tranzistorji za PWM}{2}
+\contentsline {subsection}{\numberline {3.4}Digitalno analogni pretvornik}{3}
+\contentsline {subsection}{\numberline {3.5}Operacijski oja"cevalnik}{3}
+\contentsline {section}{\numberline {4}Sestava sheme}{3}
+\contentsline {section}{\numberline {5}Izdelava tiskanine}{4}
+\contentsline {section}{\numberline {6}Programiranje}{6}
+\contentsline {subsection}{\numberline {6.1}PWM enota}{6}
+\contentsline {subsection}{\numberline {6.2}Povezava s senzorjem zasuka}{6}
+\contentsline {subsection}{\numberline {6.3}Algoritem za izra"cun hitrosti}{7}
+\contentsline {subsection}{\numberline {6.4}Povezava z digitalno analognim pretvornikom}{7}
+\contentsline {subsection}{\numberline {6.5}Ostale te"zave}{7}
+\contentsline {section}{\numberline {7}Pisanje poro"cila}{8}
+\contentsline {section}{\numberline {8}Napake projekta}{8}
+\contentsline {subsection}{\numberline {8.1}Mo"ski "footprint"~za "zenski konektor}{8}
+\contentsline {subsection}{\numberline {8.2}Priklju"cek za napajanje}{9}
+\contentsline {subsection}{\numberline {8.3}Pull-down upori na gate-u MOS-FETa}{9}
+\contentsline {subsection}{\numberline {8.4}Napaka v povezavi senzorja z vezjem}{9}
+\contentsline {subsection}{\numberline {8.5}Postavitev potenciometra poleg JTAG konektorja}{9}
+\contentsline {subsection}{\numberline {8.6}Zamenjana vhoda na od"stevalniku}{10}
+\contentsline {subsection}{\numberline {8.7}Narobe konfigurirani pini na DAC-u}{10}
+\contentsline {subsection}{\numberline {8.8}Napa"cna vrednost referen"cne napetosti}{10}
+\contentsline {section}{\numberline {9}Zaklju"cek}{10}
+\contentsline {section}{\numberline {10}Dodatek 1}{11}
+\contentsline {section}{\numberline {11}Dodatek 2}{14}

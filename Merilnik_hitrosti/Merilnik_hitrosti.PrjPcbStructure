@@ -1,0 +1,3 @@
+Record=TopLevelDocument|FileName=Sheet1_popravljena.SchDoc
+Record=SheetSymbol|SourceDocument=Sheet1_popravljena.SchDoc|Designator=Designator|SchDesignator=Designator|FileName=Analog.SchDoc|SymbolType=Normal|RawFileName=Analog.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=Sheet1_popravljena.SchDoc|Designator=Designator|SchDesignator=Designator|FileName=Napajanje.SchDoc|SymbolType=Normal|RawFileName=Napajanje.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 

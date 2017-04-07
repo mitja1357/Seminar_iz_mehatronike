@@ -1,0 +1,4 @@
+Added Component: Designator=C5(C0603)
+Added Pin To Net: NetName=VREF Pin=C5-1
+Added Pin To Net: NetName=GND Pin=C5-2
+Change Room Name: Old Name=Designator_1 New Name=Designator

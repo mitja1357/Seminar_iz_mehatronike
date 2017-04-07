@@ -1,0 +1,21 @@
+----------------------------------------------------------------------------------------------------------------------------------
+NCDrill File Report For: Merilnik_2017_01_13.PcbDoc   1/13/2017  2:54:28 PM
+----------------------------------------------------------------------------------------------------------------------------------
+
+Layer Pair : Top Layer to Bottom Layer
+ASCII RoundHoles File : Merilnik_2017_01_13.TXT
+
+Tool       Hole Size               Hole Tolerance               Hole Type       Hole Count   Plated         Tool Travel
+----------------------------------------------------------------------------------------------------------------------------------
+T1      20mil (0.5mm)           +/-1mil (0.03mm)                  Round             3         PTH        0.28inch (7.18mm)
+T2      20mil (0.5mm)                                             Round             151       PTH        35.97inch (913.67mm)
+T3      28mil (0.711mm)                                           Round             2         PTH        0.06inch (1.55mm)
+T4      30mil (0.762mm)                                           Round             19        PTH        2.47inch (62.73mm)
+T5      47mil (1.19mm)                                            Round             15        PTH        1.95inch (49.61mm)
+T6      47mil (1.2mm)                                             Round             2         PTH        0.20inch (5.00mm)
+T7      126mil (3.2mm)                                            Round             6         PTH        9.40inch (238.80mm)
+T8      236mil (6mm)                                              Round             3         PTH        1.19inch (30.15mm)
+----------------------------------------------------------------------------------------------------------------------------------
+Totals                                                                              201
+
+Total Processing Time (hh:mm:ss) : 00:00:00

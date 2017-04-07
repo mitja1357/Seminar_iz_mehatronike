@@ -1,0 +1,7 @@
+Removed Pin From Net: NetName=HITROST Pin=IC1-4
+Removed Pin From Net: NetName=KOT10X Pin=IC1-6
+Added Pin To Net: NetName=KOT10X Pin=IC1-4
+Added Pin To Net: NetName=HITROST Pin=IC1-6
+Added Room: Name=Designator
+Added Room: Name=Designator
+Added Room: Name=Sheet1

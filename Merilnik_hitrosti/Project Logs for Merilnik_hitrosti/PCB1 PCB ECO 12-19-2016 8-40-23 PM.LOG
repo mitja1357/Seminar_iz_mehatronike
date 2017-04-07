@@ -1,0 +1,8 @@
+Removed Pin From Net: NetName=DAC CS Pin=IC6-33
+Added Pin To Net: NetName=DAC CS Pin=IC6-15
+Change Net Name : Old Net Name=DAC CS New Net Name=NetIC1_3
+Change Net Name : Old Net Name=SPIMOSI New Net Name=NetIC1_1
+Change Net Name : Old Net Name=T\R\S\T\ New Net Name=TRST
+Added Room: Name=Designator
+Added Room: Name=Designator
+Added Room: Name=Sheet1

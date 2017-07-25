@@ -44,8 +44,12 @@
 	\vspace{2cm}
 	{\Large Mitja Ali"c\par}
 	\vspace{0.5cm}
+	Profesor:\par
+	prof.~dr.~Danijel Von"cina\par
+		\vspace{0.25cm}
 	Mentor:\par
-	Dr.~Mitja  \textsc{Nemec}
+	doc.~dr.~Mitja Nemec\par
+	
 
 	\vfill
 
@@ -63,34 +67,52 @@ Pri predmetu seminar iz mehatronike sem si izbral projekt izdelave digitalneg me
 
 \section{Zahteve}
 
-Moja naloga je sestaviti vezje napajano s 5~V, na katero se priklopi senzor zasuka RM44SI. Izhoda vezja sta analogna signala kota zasuka in hitrosti v razponu med -10~V in 10~V. Enake zahteve je imel "ze moj predhodnik, le da je na tiskanino priklopi Piccolo controlstick, jaz pa sem na tiskanino dal mikrokontroler.
+Na za"cetku sem si prebral poro"cilo mojega predhodnika in njegove zahteve prilagodil. Osnovne zahteve so bile enake. Blokovna shema je na sliki \ref{fig:blokovna}.  Tiskanina bo priklju"cena na 5 V napajalni vir. Ostale napetosti so generirane s DC-DC pretvornikom. Za znane komponente sem pregledal podatkovne liste in za"cel graditi shemo.
 
-\section{Dolo"canje elementov}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\linewidth]{blokovna_shema.png}
+	\caption{Blokovna shema merilnika z vrednostmi napajalnih napetosti in velikkostjo napetostnih siganlov}
+	\label{fig:blokovna}
+\end{figure}
 
-V novembru 2016 sem se lotil izdelave sheme in hkrati dolo"canja elementov. Okvirno shemo mi je sestavil "ze Prajndl. Shemi sem moral dodati "se mikrokrmilnik in kar spada k temu (napajalnik zanj, JTAG konektor).
+Za prera"cunavanje in komunikacijo sem uporabil mikro krmilni TMS320F28027. Izvorno informacijo o kotu zasuka gredi elektromotorskega sklopa prejemamo iz absolutnega dajalnika zzasuka podjetja RLS z oznako RM44SI0012B30F2E10. Izhod senzorja je lahko inkremantalni z referen"cno to"cko, v obliki analognih potekov sinusa in kosinusa, ali preko serijske komunikacije. Komunikacija deluje v diferencialnem na"cinu, kar pove"ca zanesljivost prenosa. Mikrokrmilnik podpira komunikacijo SPI, zato je potrebno uporabiti gonilik ki pretvori diferencialna signala v  polariziran signal. Uporabil sem integrirano vezje SN65HVD73.
 
-\subsection{Mikrokrmilnik}
-Mentor mi je predalgal naj vzamem krmilnik iz serije C2000 podjetja Texas Instruments, kateri podira SPI komunikacijo, je "cim manj"si in je dobavljiv na Farnell-u. Odlo"cil sem se za krmilnik TMS320F28027. Ima samo en SPI modul katerega sem uporabil tako, da sem pin za po"siljanje vezal na digitalno analogni pretvornik (v nadeljevanju DAC), pin za sprejemanje pa povezal s senzorjem.
+Na izhodni strani aplikacije "zelimo podatek o poziciji in posledi"cno hitrosti na"sega pogona po"siljati naprej v analogni obliki za nadaljno regulacijo. Potrebna sta dva analogna izhoda zato sem uporabil TLV5618A. Gre za dvokanalni 12-bitni digitalno analogni pretvornik (DAC). Za vi"sino referen"cne napetosti Vref sem izbral napetost 4,096~V. Napetost sem generiral s LM4132BMF-4.1. 
 
-\subsection{Komunikacijski pretvornik}
+Tako komunikacija s senzorjem kot tudi z DAC-om zahteva SPI povezavo. Mikrokrmilnik ima le eno SPI enoto. Predhodnik je ugotovil, da lahko senzor in DAC poganja le z eno SPI enoto. Master-input slave-output (MISO) signal slu"zi za prejemanje podatkov s senzorja. Master-output slave-input (MOSI) signal po"slje podatke na DAC. Uro komunikacijskega modula je povezana na obe enoti. 
 
-Senzor zasuka podjetja RLS, RM44SI deluje po komunikaciji RS422, zato sem uporabil vmesnik SN65HVD73 za pretvorbo komunikacije.
+Za zagotovitev "zeljenih izhodnih napetosti izhoda DAC-a oja"cam s operacijskim oja"cevalnikom. Zahteva mentorja je bila , da ima operacijski oja"cevalnik "cim manj"so sofazno oja"cenje ter naj se vsi nahajajo v enem ohi"sju. Uporabil sem oja"cevaljnik OPA4192IPW. Potreboval sem bipolarno napajanje +/- 15~V, ki sem ga generiral s pretvornikom TMH515D.
 
-\subsection{Tranzistorji za PWM}
-
-Za krmiljeneje LED diod s PWM enoto sem izbral tranzistorje 2N7002KT1G podjetja Semiconductor. Je v ohi"sju SOT23 katero enako ohi"sje imajo tudi tranzistorji uporabljeni pri projektu Prajndla(BSS138). Ker so tranzistorji BSS138 "ze v laboraratoriju sem uporabil te in ni bilo potrebno naro"cilo drugih. 
-
-
-\subsection{Digitalno analogni pretvornik}
-
-Prajndl je uporabil na svojem vezju DAC TLV5610 z osmimi izhodi katerega je opisal prof. Ambro"zi"c na predavanjih DP2. Na izhodu sem potreboval le dva kanala (kot in vrtinlna hitrost), zato sem uporabil DAC TLV5618A z dvema izhodoma.
+Prisotnost napajanja prikazujem na rumeni LED diodi, priklju"ceni na osnovno napajalno napetost 5~V. Z zeleno LED diodo sem prikazoval trenutno vrednost senzorja. S spreminjanjem pozicija se je spreminjala svetilnost LED diode. To sem izvedel s PWM enoto in tranzistorjem serijsko vezanega s LED diodo. Svetilnost LED diode je tako odvisna od preklopnega razmerja PWM enote. Enako sem storil za rde"co led diodo,ki je predstavljala absolutno vrednost hitrosti.
 
 
-\subsection{Operacijski oja"cevalnik}
-
-"Zelja mentorja je bila uporabiti operacijski oja"cevalnik s "cim manj"so offset napetostjo in vsemi oja"cevalniki v enem ohi"sju. Na podlagi zahtev sem izbral OPA4192ID. Izhod oja"cevalnika mora biti med -10~V in +10~V zato sem napajanje oja"cevalnika dobil z DC-DC pretvornika TMA 0515D podjetja Traco Power.  
-
-
+%Moja naloga je sestaviti vezje napajano s 5~V, na katero se priklopi senzor zasuka RM44SI. Izhoda vezja sta analogna signala kota zasuka in hitrosti v razponu med -10~V in 10~V. Enake zahteve je imel "ze moj predhodnik, le da je na tiskanino priklopi Piccolo controlstick, jaz pa sem na tiskanino dal mikrokontroler.
+%
+%\section{Dolo"canje elementov}
+%
+%V novembru 2016 sem se lotil izdelave sheme in hkrati dolo"canja elementov. Okvirno shemo mi je sestavil "ze Prajndl. Shemi sem moral dodati "se mikrokrmilnik in kar spada k temu (napajalnik zanj, JTAG konektor).
+%
+%\subsection{Mikrokrmilnik}
+%Mentor mi je predalgal naj vzamem krmilnik iz serije C2000 podjetja Texas Instruments, kateri podira SPI komunikacijo, je "cim manj"si in je dobavljiv na Farnell-u. Odlo"cil sem se za krmilnik TMS320F28027. Ima samo en SPI modul katerega sem uporabil tako, da sem pin za po"siljanje vezal na digitalno analogni pretvornik (v nadeljevanju DAC), pin za sprejemanje pa povezal s senzorjem.
+%
+%\subsection{Komunikacijski pretvornik}
+%
+%Senzor zasuka podjetja RLS, RM44SI deluje po komunikaciji RS422, zato sem uporabil vmesnik SN65HVD73 za pretvorbo komunikacije.
+%
+%\subsection{Tranzistorji za PWM}
+%
+%Za krmiljeneje LED diod s PWM enoto sem izbral tranzistorje 2N7002KT1G podjetja Semiconductor. Je v ohi"sju SOT23 katero enako ohi"sje imajo tudi tranzistorji uporabljeni pri projektu Prajndla(BSS138). Ker so tranzistorji BSS138 "ze v laboraratoriju sem uporabil te in ni bilo potrebno naro"cilo drugih. 
+%
+%
+%\subsection{Digitalno analogni pretvornik}
+%
+%Prajndl je uporabil na svojem vezju DAC TLV5610 z osmimi izhodi katerega je opisal prof. Ambro"zi"c na predavanjih DP2. Na izhodu sem potreboval le dva kanala (kot in vrtinlna hitrost), zato sem uporabil DAC TLV5618A z dvema izhodoma.
+%
+%
+%\subsection{Operacijski oja"cevalnik}
+%
+%"Zelja mentorja je bila uporabiti operacijski oja"cevalnik s "cim manj"so offset napetostjo in vsemi oja"cevalniki v enem ohi"sju. Na podlagi zahtev sem izbral OPA4192ID. Izhod oja"cevalnika mora biti med -10~V in +10~V zato sem napajanje oja"cevalnika dobil z DC-DC pretvornika TMA 0515D podjetja Traco Power.  
 
 \section{Sestava sheme}
 \label{shema}
@@ -99,7 +121,7 @@ Shemo sem delal v programu Altium Designer 16.1. Celotna shema se nahaja v \name
 
 
 
-V "ze narejeno shemo Prajndla je bilo potrebno dodati mikrokrmilnik. Mentor mi je poslal svoje starej"se projkte, po katerih sem nato povezal pine mikrokrmilnika (Slika \ref{fig:uCshema}). Ob njemu je postavljen JTAG konektor. GPIO in PWM pine sem po mikrokrmilniku razporedil tako, da so mi na tiskanini "cim bolje ustrezali.
+Mentor mi je poslal svoje starej"se projekte, po katerih sem nato povezal pine mikrokrmilnika (Slika \ref{fig:uCshema}). Ob njemu je postavljen JTAG konektor. GPIO in PWM pine sem po mikrokrmilniku razporedil tako, da so mi na tiskanini "cim bolje ustrezali.
 	\begin{figure}[h!]
 		\centering
 		\includegraphics[width=\textwidth]{uC.png}
@@ -108,7 +130,7 @@ V "ze narejeno shemo Prajndla je bilo potrebno dodati mikrokrmilnik. Mentor mi j
 	\end{figure}
 
 
-PWM pina sem povezal s tranzistorjema (Slika~\ref{fig:LEDshema}), kjer pa nisem dal upora na maso ("pull-down"). Tako je na gate-u MOS-FET-a lahko ob nepri"cakovanem dogodku (nedefiniran izhod PWM enote)ostal naboj in posledi"cno je LED dioda svetila.
+PWM pina sem povezal s tranzistorjema (Slika~\ref{fig:LEDshema}), kjer nisem povezal upora na maso ("pull-down"). Tako je na gate-u MOS-FET-a lahko ob nepri"cakovanem dogodku (nedefiniran izhod PWM enote) ostal naboj in posledi"cno je LED dioda svetila.
 
 	\begin{figure}[h!]
 		\centering
@@ -116,7 +138,7 @@ PWM pina sem povezal s tranzistorjema (Slika~\ref{fig:LEDshema}), kjer pa nisem 
 		\caption{Shema krmiljenja LED diod}
 		 \label{fig:LEDshema}
 	\end{figure}
-Pri povezavi pretvornika komunikacije je Prajndel naredil lapsus (zamenjal para ure in podatka na SN65HVD73). To sem zamenjal, nisem pa zamenjal tudi elemntov. Med izhodom senzorja zasuka mora biti paralelno vezan 120 $\mathrm{\Omega}$ upor in manj"si kondenzator. To pa sem obdr"zal med povezavama +CLK~-CLK. Tekom projekta sem ugotovil, da je to napaka. Upor R10 in kondenzator C12 (Slika \ref{SPIshema}), bi se morala nahajati med +DAT in -DAT. Upora R11 in R12 pa bi morala biti na povezavi +CLK oz -~CLK.
+Pri povezavi pretvornika komunikacije je predhodnik naredil lapsus (zamenjal para ure in podatka na SN65HVD73). To sem zamenjal, nisem pa zamenjal tudi elemntov. Med izhodom senzorja zasuka mora biti paralelno vezan 120 $\mathrm{\Omega}$ upor in manj"si kondenzator. To pa sem obdr"zal med povezavama +CLK~-CLK. Tekom projekta sem ugotovil, da je to napaka. Upor R10 in kondenzator C12 (Slika \ref{SPIshema}), bi se morala nahajati med +DAT in -DAT. Upora R11 in R12 bi morala biti na povezavi +CLK oz -~CLK.
 
 	\begin{figure}[h!]
 		\centering
@@ -124,8 +146,8 @@ Pri povezavi pretvornika komunikacije je Prajndel naredil lapsus (zamenjal para 
 		\caption{Shema komunikacije s senzorjem zasuka}
 		\label{SPIshema}
 	\end{figure}
-Vezava DAC-a je na sliki~\ref{DACshema}. Takoj na sliki se vidi, da sem pine ozna"ceval na levi strani od zgoraj navzol, na desni pa prav tako. Ob izbiri
-"\mbox{footprint-a}"~pa sem upo"steval razvr"s"cenost pinov na levi od zgoraj navzol na desni pa od spodaj navzgor. Tako je bil "footprint" leve strani DAC-a v obratnem vrsnem redu. Huda napaka je predvsem to, da je masa DAC-a vezna na 5~V. Pini, vezani z ostalo periferijo lahko tako deformirajo tudi druge dele vezja.
+Vezava DAC-a je na sliki~\ref{DACshema}. Takoj na sliki se vidi, da sem pine ozna"ceval na levi strani od zgoraj navzol in na desni prav tako. Ob izbiri
+"\mbox{footprint-a}" sem upo"steval razvr"s"cenost pinov na levi od zgoraj navzol na desni pa od spodaj navzgor. Tako je bil "footprint" leve strani DAC-a v obratnem vrsnem redu. Huda napaka je predvsem to, da je masa DAC-a vezna na 5~V. Pini, vezani z ostalo periferijo lahko tako deformirajo druge dele vezja.
 
 
 
@@ -138,7 +160,7 @@ Vezava DAC-a je na sliki~\ref{DACshema}. Takoj na sliki se vidi, da sem pine ozn
 
 
 
-Operacijske oja"cevalnike bi moral le prerisati. Sam sem sestavil le blok kot skupek 4 oja"cevalnikov. Ob povezovanju sem naredil napako, da sem na  oja"cevalniku C zamenjal vhoda. Tako sem naredil pozitivno povratno zanko in posledi"cno vezje ni ustrezalo od"stevalniku (Slika~\ref{OPshema}).
+Operacijske oja"cevalnike bi moral le prerisati, oja"cenje pa zmanj"sati za polovico. Sam sem sestavil le blok kot skupek 4 oja"cevalnikov. Ob povezovanju sem naredil napako, da sem na  oja"cevalniku C zamenjal vhoda. Tako sem naredil pozitivno povratno zanko in posledi"cno vezje ni ustrezalo od"stevalniku (Slika~\ref{OPshema}).
 
 
 	\begin{figure}[!h]
@@ -188,7 +210,7 @@ Kodo za izra"cun vrtilne hitrosti sem napisal "ze pri vajah predmeta DP2. Vrnjen
 
 \subsection{Povezava z digitalno analognim pretvornikom}
 
-Ko sem dobil DAC in je bil algoritem za  izra"cun hitrosti dokon"can, sem naspajkal pretvornik na tiskanino. Ob priklju"citvi na napetostni vir, tiskanina ni izkazovala nobene napake. Zato sem se lotil nastavljanja izhodov za postavitev komunikacije. Za vzpostavitev komunikacije (chip enable), sem uporabil GPIO~34, kateri ima le to funkcijo. V "datasheet-u"~nikjer drugje ni bil ni"c opisan. Vsi ostali pini imajo ve"c funkcij, zato je bil vsak pin podrobneje opisan, GPIO~34 pa ima le to funkcijo in ubistvu ne potrebuje drugega opisa. Ko bi moral postaviti GPIO~34 na 0~V je imel ta konstntno 5~V. Naj omenim, da je mikrokrmilnik napajan s 3,3~V in v razponu, od 0~V do napajalne napetosti, je lahko izhod. To se mi tu "se ni posvetilo. Dvomil sem v pin GPIO~34 kateri ni bil podrobneje opisan v "datasheet-u". Zato sem na mikrokrmilniku prevezal tako, da sem chip enable pin DAC-a povezal z GPIO~19. Ta pin ima "ze funkicjijo, da se postavi v "zelejeno stanje ob za"cetku SPI komuniciranja. Vendar ta prevezava ni pomagala. Mentor je nato ugotovil napako, ki je bila ustvarjena v shemi, da so pini DAC-a na levi strani zamenjani. Na tej to"cki je mentor predlagal, da s projektom kon"cam in bo zapisan kot neuspe"sno izdelan. Nato sva ugotovila, da se lahko DAC "se preve"ze v delujo"ce stanje. 
+Ko sem dobil DAC in je bil algoritem za  izra"cun hitrosti dokon"can, sem naspajkal pretvornik na tiskanino. Ob priklju"citvi na napetostni vir, tiskanina ni izkazovala nobene napake. Zato sem se lotil nastavljanja izhodov za postavitev komunikacije. Za vzpostavitev komunikacije (chip enable), sem uporabil GPIO~34, kateri ima le to funkcijo. V "datasheet-u"~nikjer drugje ni bil ni"c opisan. Vsi ostali pini imajo ve"c funkcij, zato je bil vsak pin podrobneje opisan, GPIO~34 pa ima le to funkcijo in ne potrebuje drugega opisa. Ko bi moral postaviti GPIO~34 na 0~V je imel ta konstntno 5~V. Naj omenim, da je mikrokrmilnik napajan s 3,3~V in v razponu, od 0~V do napajalne napetosti, je lahko izhod. To se mi tu "se ni posvetilo. Dvomil sem v pin GPIO~34 kateri ni bil podrobneje opisan v "datasheet-u". Zato sem na mikrokrmilniku prevezal tako, da sem chip enable pin DAC-a povezal z GPIO~19. Ta pin ima "ze funkicjijo, da se postavi v "zelejeno stanje ob za"cetku SPI komuniciranja. Vendar ta prevezava ni pomagala. Mentor je nato ugotovil napako, ki je bila ustvarjena v shemi, da so pini DAC-a na levi strani zamenjani. Na tej to"cki je mentor predlagal, da s projektom kon"cam in bo zapisan kot neuspe"sno izdelan. Nato sva ugotovila, da se lahko DAC "se preve"ze v delujo"ce stanje. 
 
 Prevezal sem DAC in za"celo je delovati. Po tem je bilo potrebno samo "se skalirati in nastaviti vrednosti, da bo kon"cni izhod napetosti hitrosti in kota med $\mathrm{\pm}$~10V. Pojavila se je te"zava, da je izhod B DAC-a upadel za pribli"zno 1~V ko je potekala komunikacija. Tega nisem znal re"siti, slutim pa, da je bila napaka povzro"cena z dodatnimi prevezavami na tiskanini.
 

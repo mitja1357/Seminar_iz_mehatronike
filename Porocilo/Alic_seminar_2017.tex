@@ -63,28 +63,28 @@
 \newpage
 
 \section{Uvod}
-Pri predmetu seminar iz mehatronike sem si izbral projekt izdelave digitalneg merilnika vrtilne hitrosti. Pri delu na projektu, bom osvojil znanje risanje sheme o"zi"cenja, risanja tiskanega vezja, izdelava vezja in testiranje. V povezavi s predmetom digitalno procesiranje v mehatroniki 2 (v nadaljevanju DP2), bom napisal program za dolo"canje vrtilne hitrosti na podlagi poznavanja tenutnega kota zasuka. Cilj izdelanega vezja, je analogni prikaz vrtilne hitrosti na izhodu, katero bi lahko "studentje opazovali na laboratorijskih vajah. Podobno seminarsko nalogo je imel "Ziga Prajndl\footnote{Digitalni merilnik hitrosti, "Ziga Prajndl, LRTME, Ljubljana, 2016} leto prej, kjer je uporabil F28069 Piccolo controlSTICK. Piccolo se uporablja pri laboratorijskih vajah predmeta DP2. Na tem "cipu naj izdelal salgoritem, nato pa ga prenesel na svojo tiskanino, kjer bi uporabil drug mikrokrmilnik.
+Pri predmetu seminar iz mehatronike, sem si izbral projekt izdelave digitalneg merilnika vrtilne hitrosti. Pri delu na projektu, bom osvojil znanje risanje sheme o"zi"cenja, risanja tiskanega vezja, izdelavo vezja, programiranje mikrokrmilnika in testiranje. V povezavi s predmetom digitalno procesiranje v mehatroniki 2 (v nadaljevanju DP2), bom napisal program za dolo"canje vrtilne hitrosti ob poznavanju kota zasuka. Cilj izdelanega vezja, je analogni prikaz vrtilne hitrosti na izhodu, katero bi lahko "studentje opazovali na laboratorijskih vajah v sklopu elektromotorskega pogona. Podobno seminarsko nalogo je imel "Ziga Prajndl \cite{prajndl} leto prej, kjer je uporabil F28069 Piccolo controlSTICK. Piccolo se uporablja pri laboratorijskih vajah predmeta DP2. Na tem Piccol-u naj bi izdelal algoritem, ki ga bom nato prenesel na svojo tiskanino, na drug mikrokrmilnik.
 
 \section{Zahteve}
 
-Na za"cetku sem si prebral poro"cilo mojega predhodnika in njegove zahteve prilagodil. Osnovne zahteve so bile enake. Blokovna shema je na sliki \ref{fig:blokovna}.  Tiskanina bo priklju"cena na 5 V napajalni vir. Ostale napetosti so generirane s DC-DC pretvornikom. Za znane komponente sem pregledal podatkovne liste in za"cel graditi shemo.
+Na za"cetku sem si prebral poro"cilo mojega predhodnika in njegove zahteve prilagodil na moj seminar. Osnovne zahteve so bile enake. Blokovna shema je prikazana na sliki \ref{fig:blokovna}.  Tiskanina bo priklju"cena na 5 V napajalni vir. Ostale napetosti so generirane z DC-DC pretvornikom. Za znane komponente sem pregledal podatkovne liste in za"cel graditi shemo.
 
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=\linewidth]{blokovna_shema.png}
-	\caption{Blokovna shema merilnika z vrednostmi napajalnih napetosti in velikkostjo napetostnih siganlov}
+	\caption{Blokovna shema merilnika z vrednostmi napajalnih napetosti in velikostjo napetostnih siganlov}
 	\label{fig:blokovna}
 \end{figure}
 
-Za prera"cunavanje in komunikacijo sem uporabil mikro krmilni TMS320F28027. Izvorno informacijo o kotu zasuka gredi elektromotorskega sklopa prejemamo iz absolutnega dajalnika zzasuka podjetja RLS z oznako RM44SI0012B30F2E10. Izhod senzorja je lahko inkremantalni z referen"cno to"cko, v obliki analognih potekov sinusa in kosinusa, ali preko serijske komunikacije. Komunikacija deluje v diferencialnem na"cinu, kar pove"ca zanesljivost prenosa. Mikrokrmilnik podpira komunikacijo SPI, zato je potrebno uporabiti gonilik ki pretvori diferencialna signala v  polariziran signal. Uporabil sem integrirano vezje SN65HVD73.
+Za prera"cunavanje in komunikacijo sem uporabil mikrokrmilnik TMS320F28027. Izvorno informacijo o kotu zasuka gredi elektromotorskega sklopa prejemam iz absolutnega dajalnika zasuka podjetja RLS merilna tehnika, z oznako RM44SI0012B30F2E10. Izhod senzorja je lahko inkremantalni z referen"cno to"cko, v obliki analognih potekov sinusa in kosinusa, ali preko serijske komunikacije. Komunikacija deluje v diferencialnem na"cinu, kar pove"ca zanesljivost prenosa. Mikrokrmilnik podpira komunikacijo SPI, zato je potreben gonilnik, ki pretvori diferencialna signala v  polariziran signal. Uporabil sem integrirano vezje SN65HVD73.
 
-Na izhodni strani aplikacije "zelimo podatek o poziciji in posledi"cno hitrosti na"sega pogona po"siljati naprej v analogni obliki za nadaljno regulacijo. Potrebna sta dva analogna izhoda zato sem uporabil TLV5618A. Gre za dvokanalni 12-bitni digitalno analogni pretvornik (DAC). Za vi"sino referen"cne napetosti Vref sem izbral napetost 4,096~V. Napetost sem generiral s LM4132BMF-4.1. 
+Na izhodni strani aplikacije "zelimo podatek o poziciji in posledi"cno hitrosti na"sega pogona po"siljati naprej v analogni obliki za nadaljno regulacijo. Potrebna sta dva analogna izhoda, zato sem uporabil TLV5618A. Gre za dvokanalni 12-bitni digitalno analogni pretvornik (DAC). Za vi"sino referen"cne napetosti $V_{ref}$ sem izbral napetost 4,096~V. Napetost sem generiral z LM4132BMF-4.1. 
 
-Tako komunikacija s senzorjem kot tudi z DAC-om zahteva SPI povezavo. Mikrokrmilnik ima le eno SPI enoto. Predhodnik je ugotovil, da lahko senzor in DAC poganja le z eno SPI enoto. Master-input slave-output (MISO) signal slu"zi za prejemanje podatkov s senzorja. Master-output slave-input (MOSI) signal po"slje podatke na DAC. Uro komunikacijskega modula je povezana na obe enoti. 
+Komunikacija s senzorjem, kot z DAC-om zahteva SPI povezavo. Mikrokrmilnik ima le eno SPI enoto. Predhodnik je ugotovil, da je potrebna za komunikacijo s senzorjem in DAC-om dovolj ena SPI enota v mikrokrmilniku. Master-input slave-output (MISO) signal slu"zi za prejemanje podatkov s senzorja. Master-output slave-input (MOSI) signal po"slje podatke na DAC. Ura komunikacijskega modula je povezana na obe enoti. 
 
-Za zagotovitev "zeljenih izhodnih napetosti izhoda DAC-a oja"cam s operacijskim oja"cevalnikom. Zahteva mentorja je bila , da ima operacijski oja"cevalnik "cim manj"so sofazno oja"cenje ter naj se vsi nahajajo v enem ohi"sju. Uporabil sem oja"cevaljnik OPA4192IPW. Potreboval sem bipolarno napajanje +/- 15~V, ki sem ga generiral s pretvornikom TMH515D.
+Za zagotovitev "zeljenih izhodnih signalov, signale DAC-a oja"cam z operacijskim oja"cevalnikom. Zahteva mentorja je bila, da ima operacijski oja"cevalnik "cim manj"so offset napetost, ter naj se vsi nahajajo v enem ohi"sju. Uporabil sem oja"cevaljnik OPA4192IPW. Potreboval sem bipolarno napajanje +/- 15~V, ki sem ga generiral s TMH515D.
 
-Prisotnost napajanja prikazujem na rumeni LED diodi, priklju"ceni na osnovno napajalno napetost 5~V. Z zeleno LED diodo sem prikazoval trenutno vrednost senzorja. S spreminjanjem pozicija se je spreminjala svetilnost LED diode. To sem izvedel s PWM enoto in tranzistorjem serijsko vezanega s LED diodo. Svetilnost LED diode je tako odvisna od preklopnega razmerja PWM enote. Enako sem storil za rde"co led diodo,ki je predstavljala absolutno vrednost hitrosti.
+Prisotnost napajanja indiciram na rumeni LED diodi, priklju"ceni na osnovno napajalno napetost 5~V. Z zeleno LED diodo prikazujem trenutno vrednost senzorja. S spreminjanjem pozicija se spreminja svetilnost LED diode. To sem izvedel s PWM enoto in tranzistorjem serijsko vezanega z LED diodo. Svetilnost LED diode je tako odvisna od preklopnega razmerja PWM enote. Enako sem storil za rde"co led diodo, ki predstavlja absolutno vrednost hitrosti.
 
 
 %Moja naloga je sestaviti vezje napajano s 5~V, na katero se priklopi senzor zasuka RM44SI. Izhoda vezja sta analogna signala kota zasuka in hitrosti v razponu med -10~V in 10~V. Enake zahteve je imel "ze moj predhodnik, le da je na tiskanino priklopi Piccolo controlstick, jaz pa sem na tiskanino dal mikrokontroler.
@@ -130,7 +130,7 @@ Mentor mi je poslal svoje starej"se projekte, po katerih sem nato povezal pine m
 	\end{figure}
 
 
-PWM pina sem povezal s tranzistorjema (Slika~\ref{fig:LEDshema}), kjer nisem povezal upora na maso ("pull-down"). Tako je na gate-u MOS-FET-a lahko ob nepri"cakovanem dogodku (nedefiniran izhod PWM enote) ostal naboj in posledi"cno je LED dioda svetila.
+PWM pina sem povezal s tranzistorjema (Slika~\ref{fig:LEDshema}). Med gate tranzistorja in maso nisem povezal upora ("pull-down"). Tako je bil izhod postavljen v visokoimpedan"cno stanje in posledi"cno je LED dioda lahko svetila.
 
 	\begin{figure}[h!]
 		\centering
@@ -146,8 +146,8 @@ Pri povezavi pretvornika komunikacije je predhodnik naredil lapsus (zamenjal par
 		\caption{Shema komunikacije s senzorjem zasuka}
 		\label{SPIshema}
 	\end{figure}
-Vezava DAC-a je na sliki~\ref{DACshema}. Takoj na sliki se vidi, da sem pine ozna"ceval na levi strani od zgoraj navzol in na desni prav tako. Ob izbiri
-"\mbox{footprint-a}" sem upo"steval razvr"s"cenost pinov na levi od zgoraj navzol na desni pa od spodaj navzgor. Tako je bil "footprint" leve strani DAC-a v obratnem vrsnem redu. Huda napaka je predvsem to, da je masa DAC-a vezna na 5~V. Pini, vezani z ostalo periferijo lahko tako deformirajo druge dele vezja.
+Vezava DAC-a je na sliki~\ref{DACshema}. Na sliki se vidi, da sem pine ozna"ceval na levi strani od zgoraj navzol in na desni prav tako. Pine na "footprintu" o"stevil"cujemo v nasprotni smeri urinega kazalca, pri ohi"sju SOIC 8, pine na levi strani "cipa od zgoraj navzdol, na desni strani, od spodaj navzgor.
+Pini so bili na "footrint-u" narobe razvr"s"ceni. Huda napaka je predvsem to, da je masa DAC-a vezna na 5~V. Pini DAC-a, vezani z ostalo periferijo lahko deformirajo druge dele vezja.
 
 
 
@@ -178,12 +178,12 @@ Ko sem shemo, po mojem mnenju zaklju"cil, sem se lotil postavitve elementov na d
 	\begin{figure}[!h]
 		\centering
 		\includegraphics[ width=\textwidth]{Merilnik_2017_01_13.pdf}
-		\caption{Izgled tiskanine katera je "sla v izdelavo}
+		\caption{Izgled tiskanine od zgoraj, katera je "sla v izdelavo}
 		\label{PCB}
 	\end{figure}
 
  
- "Footprint-e"~sem nastavil "ze na shemi, zato se s tem tu nisem ukvarjal. Vse napake na tiskanini, so posledica nenatan"cnosti pri na"crtovanju sheme. Konektor za napajanje sem izbral tako, da je bilo potrebno vanj vija"citi napajalni "zici. Naslednik naj uporabi konektor, katerega lahko izklopi brez kak"snih potrebnih pripomo"ckov. Sam sem postavil na tiskanino upore in kondenzatorje velikosti 0603\footnote{Imperialne enote, v metri"cnem sistemu je to 1608}. V laboratoriju LRTME ponavadi uporabljajo komponente velikosti 0805, zato jih je bilo potrebno na Farnell-u naro"citi. Najprej sem s pomo"cjo Aleksandra Abramovi"ca naspajkal mikrokrmilnik, nato pa nadeljeval z upori ter kondenzatorji okoli mikrokrmilnika. Naspajkal sem vse razen napajalnika za napetost $\mathrm{\pm}$15V in DAC-a. DAC-a ob naro"canju materiala na Farnell-u ni bilo ve"c na zalogi, zato sem ga naro"cil na Mouser-ju. Ko sem prvi"c priklopil vezje na napetostni vir, sem napajalno napetost po"casi vi"sal in opazoval vhodni tok. "Se preden sem za"cel vezje programirati sem prevezal pina na oja"cevalniku C, katera sem v shemi zamenjal. Preko Texas Instruments XDS100v2 USB Debug Probe sem priklopil vezje na ra"cunalnik in lahko za"cel programirati v Code Composer Studio.
+ "Footprint-e"~sem nastavil "ze na shemi, zato se s tem tu nisem ukvarjal. Vse napake na tiskanini, so posledica nenatan"cnosti pri na"crtovanju sheme. Konektor za napajanje sem izbral tako, da je bilo potrebno vanj vija"citi napajalni "zici. Naslednik naj uporabi konektor, katerega lahko izklopi brez potrebnih pripomo"ckov. Sam sem postavil na tiskanino upore in kondenzatorje velikosti 0603\footnote{Imperialne enote, v metri"cnem sistemu je to 1608}. V laboratoriju LRTME ponavadi uporabljajo komponente velikosti 0805, zato jih je bilo potrebno na Farnell-u naro"citi. Najprej sem s pomo"cjo Aleksandra Abramovi"ca naspajkal mikrokrmilnik, nato pa nadeljeval z upori ter kondenzatorji okoli mikrokrmilnika. Naspajkal sem vse razen napajalnika za napetost $\mathrm{\pm}$15V in DAC-a. DAC-a ob naro"canju materiala na Farnell-u ni bilo ve"c na zalogi, zato sem ga naro"cil na Mouser-ju. Ko sem prvi"c priklopil vezje na napetostni vir, sem napajalno napetost po"casi vi"sal in opazoval vhodni tok. "Se preden sem za"cel vezje programirati sem prevezal pina na oja"cevalniku C, katera sem v shemi zamenjal. Preko Texas Instruments XDS100v2 USB Debug Probe sem priklopil vezje na ra"cunalnik in lahko za"cel programirati v Code Composer Studio.
 
 \section{Programiranje}
 Programirati sem za"cel v koncu februarja 2017.
@@ -201,18 +201,18 @@ Za PWM enoti sem moral pina GPIO~4 in GPIO~5 nastaviti za PWM izhoda. Nastavil s
 
 \subsection{Povezava s senzorjem zasuka}
 
-Pri predmetu DP2 sem dobil "ze napisano inicializacijo in zajem kota po SPI komunikaciji. Potrebni datoteki (SPI\_ dajalnik.h in \mbox{SPI\_ dajalnik.c}) sem dodal v projekt. Nastaviti sem moral "se pina za krmiljenje "cipa za spremembo komunikacije (DE na GPIO~2 in RE na GPIO~3). Nastavil sem ju na vrednosti tako, da je bila komunikacija ves "cas mogo"ca. Ko sem "zelel preveriti delovanje se je hitro pokazalo nedelovanje. Za vrnjen podatek sem dobil le invertiran urin signal. To je bila posledica mo"skega "\mbox{footprint-a}"~konektorja za povezavo s senzorjem. Zaradi zrcaljne slike je bila "zica katera napaja senzor vezana na pin CLK+. Senzor se je s tem signalom le pri"zigal in uga"sal. To napako sem re"sil tako, da sem konektor odstranil z zgornje strani tiskanine in ga prispajkal na spodnjo stran. S tem posegom sem izhodne pine konektorja spravil na pravo mesto in komunikacija je delovala.
+Pri predmetu DP2 sem dobil "ze napisano inicializacijo in zajem kota po SPI komunikaciji. Potrebni datoteki (SPI\_ dajalnik.h in \mbox{SPI\_ dajalnik.c}) sem dodal v projekt. Nastaviti sem moral "se pina za krmiljenje "cipa za spremembo komunikacije (DE na GPIO~2 in RE na GPIO~3). Nastavil sem ju na vrednosti tako, da je bila komunikacija ves "cas mogo"ca. Ko sem "zelel preveriti delovanje se je hitro pokazalo nedelovanje. Za vrnjen podatek sem dobil le invertiran urin signal. To je bila posledica mo"skega "\mbox{footprint-a}"~konektorja za povezavo s senzorjem. Zaradi zrcaljnega "footprint-a" je bila povezava katera napaja senzor vezana na urin signal CLK+. Senzor se je s tem signalom le pri"zigal in uga"sal. To napako sem re"sil tako, da sem konektor odstranil z zgornje strani tiskanine in ga prispajkal na spodnjo stran. S tem posegom sem izhodne pine konektorja spravil na pravilna mesta in komunikacija je delovala.
 
 \subsection{Algoritem za izra"cun hitrosti}  
 
-Kodo za izra"cun vrtilne hitrosti sem napisal "ze pri vajah predmeta DP2. Vrnjen rezultat je bila frekvenca in ne vrtilna hitrost, ki je le za faktor 2$\mathrm{\pi}$ skalirana. V programu sem ra"cunal s plavajo"co vejico (na procesorju TMS320f28069). Ko sem dodal to kodo v moj mikrokrmilnik, se  kode ni uspela izvajati dovolj hitro. Alogritem sem zato pretvoril na ra"cunaje s fiksno vejico\footnote{Uporabil sem format f8.24}. Algoritem se nahaja v \nameref{Dodatek2}. Uporabil sem knji"znico IQ\_ math. Algoritem  se tako izvede v dovolj kratkem "casu, "casa pa nisem pomeril.
+Kodo za izra"cun vrtilne hitrosti sem napisal "ze pri vajah predmeta DP2. Vrnjen rezultat je bila frekvenca in ne vrtilna hitrost, ki je skalirana za faktor 2$\mathrm{\pi}$. V programu sem ra"cunal s plavajo"co vejico (na procesorju TMS320f28069). Ko sem dodal to kodo v moj mikrokrmilnik, se  kode ni uspela izvajati dovolj hitro. Alogritem sem zato pretvoril na ra"cunaje s fiksno vejico\footnote{Uporabil sem format f8.24}. Algoritem se nahaja v \nameref{Dodatek2}. Uporabil sem knji"znico IQ\_ math. Algoritem  se je tako izvedel dovolj hitro, "casa izvajanja nisem pomeril.
 
 
-\subsection{Povezava z digitalno analognim pretvornikom}
+\subsection{Povezava z DAC-om}
 
-Ko sem dobil DAC in je bil algoritem za  izra"cun hitrosti dokon"can, sem naspajkal pretvornik na tiskanino. Ob priklju"citvi na napetostni vir, tiskanina ni izkazovala nobene napake. Zato sem se lotil nastavljanja izhodov za postavitev komunikacije. Za vzpostavitev komunikacije (chip enable), sem uporabil GPIO~34, kateri ima le to funkcijo. V "datasheet-u"~nikjer drugje ni bil ni"c opisan. Vsi ostali pini imajo ve"c funkcij, zato je bil vsak pin podrobneje opisan, GPIO~34 pa ima le to funkcijo in ne potrebuje drugega opisa. Ko bi moral postaviti GPIO~34 na 0~V je imel ta konstntno 5~V. Naj omenim, da je mikrokrmilnik napajan s 3,3~V in v razponu, od 0~V do napajalne napetosti, je lahko izhod. To se mi tu "se ni posvetilo. Dvomil sem v pin GPIO~34 kateri ni bil podrobneje opisan v "datasheet-u". Zato sem na mikrokrmilniku prevezal tako, da sem chip enable pin DAC-a povezal z GPIO~19. Ta pin ima "ze funkicjijo, da se postavi v "zelejeno stanje ob za"cetku SPI komuniciranja. Vendar ta prevezava ni pomagala. Mentor je nato ugotovil napako, ki je bila ustvarjena v shemi, da so pini DAC-a na levi strani zamenjani. Na tej to"cki je mentor predlagal, da s projektom kon"cam in bo zapisan kot neuspe"sno izdelan. Nato sva ugotovila, da se lahko DAC "se preve"ze v delujo"ce stanje. 
+Ko sem dobil DAC in je bil algoritem za  izra"cun hitrosti dokon"can, sem naspajkal pretvornik na tiskanino. Ob priklju"citvi na napetostni vir, tiskanina ni izkazovala nobene napake. Zato sem se lotil nastavljanja izhodov za postavitev komunikacije. Za vzpostavitev komunikacije (chip enable), sem uporabil GPIO~34. Je le digitalni vhod ali izhod. V "datasheet-u"~nikjer drugje ni bil ni"c opisan. Vsi ostali pini imajo ve"c funkcij, zato je bil vsak pin podrobneje opisan, GPIO~34 ima le osnovno funkcijo in ne potrebuje drugega opisa. Ko bi moral postaviti GPIO~34 na 0~V je imel ta konstntno 5~V. Naj omenim, da je mikrokrmilnik napajan s 3,3~V in v razponu, od 0~V do napajalne napetosti, je lahko izhod. To se mi tu "se ni posvetilo. Dvomil sem v pin GPIO~34, kateri ni bil podrobneje opisan v "datasheet-u". Zato sem na mikrokrmilniku prevezal tako, da sem chip enable pin DAC-a povezal z GPIO~19. Ta pin ima "ze funkicjijo, da se postavi v "zelejeno stanje ob za"cetku SPI komuniciranja. Vendar ta prevezava ni pomagala. Mentor je nato ugotovil napako, ki je bila ustvarjena v shemi, da so pini DAC-a na levi strani zamenjani. Na tej to"cki je mentor predlagal, da s projektom kon"cam in bo zapisan kot neuspe"sno izdelan. Ugotovila sva, da se lahko DAC "se preve"ze v delujo"ce stanje. 
 
-Prevezal sem DAC in za"celo je delovati. Po tem je bilo potrebno samo "se skalirati in nastaviti vrednosti, da bo kon"cni izhod napetosti hitrosti in kota med $\mathrm{\pm}$~10V. Pojavila se je te"zava, da je izhod B DAC-a upadel za pribli"zno 1~V ko je potekala komunikacija. Tega nisem znal re"siti, slutim pa, da je bila napaka povzro"cena z dodatnimi prevezavami na tiskanini.
+Prevezal sem DAC in za"celo je delovati. Po tem je bilo potrebno samo "se skalirati in nastaviti vrednosti, da bo kon"cni izhod napetosti hitrosti in kota med $\mathrm{\pm}$~10V. Pojavila se je te"zava, da je izhod B DAC-a upadel za pribli"zno 1~V ko je potekala komunikacija. Tega nisem znal re"siti, slutim pa, da je bila napaka povzro"cena z dodatnimi prevezavami na tiskanini in povezavo pina GND s 5~V.
 
 
 	\begin{figure}[!h]
@@ -223,13 +223,13 @@ Prevezal sem DAC in za"celo je delovati. Po tem je bilo potrebno samo "se skalir
 	\end{figure}
 
 \subsection{Ostale te"zave}
-Nepravilno se je za"cel obna"sati tudi komunikacija s senzorjem zasuka. Kljub temu, da je senzor prejemal urin signal, ni vra"cal podatka. Podatek je vrnil "ce sem ob pravem trenutku spremenil vednost DE pina na komunikaciji iz 0 na 1. To sem ugotovil, ko sem ponesre"ci povezal pin DE s pinom SPICLK. Vrednost na pinu DE je tako prekapljala med 0 in 1 in komunikacija je nato za"cela delovati. To sem posku"sal nato dose"ci tudi s programom, tako da je preklapljal vrednost na pinu DE vendar se ni odzval vedno.
+Nepravilno se je za"cel obna"sati tudi komunikacija s senzorjem zasuka. Kljub temu, da je senzor prejemal urin signal, ni vra"cal podatka. Podatek je vrnil "ce sem ob pravem trenutku spremenil vednost DE pina na komunikaciji iz 0 na 1. To sem ugotovil, ko sem povezal pin DE s pinom SPICLK. Vrednost na pinu DE je tako prekapljala med 0 in 1 in komunikacija je za"cela delovati. To sem posku"sal nato dose"ci tudi s programom, tako da je preklapljal vrednost na pinu DE, vendar se ni odzval vedno.
 
-Po tednu iskanja re"sitve za nastale te"zave sem se odlo"cil in mentorju sporo"cil, da bi projekt raje zaklju"cil saj traja "ze predolgo. Projekt ni bil tako kompleksen, vendar sem si ga z napakami zakompliciral sam.
+Po tednu iskanja re"sitve za nastale te"zave, sem se odlo"cil in mentorju sporo"cil, da bi projekt raje zaklju"cil saj traja "ze predolgo. Projekt ni bil tako kompleksen, vendar sem si ga z napakami zakompliciral sam.
 
 \section{Pisanje poro"cila}
 
-V poro"cilu sem morala zbrati vse napake, ki sem jih naredil pri projektu. Hotel sem posneti oscilograme vendar sem  ob tem skuril mikrokrmilnik. Zato oscilogramov v tem poro"cilu ne boste opazili.
+V poro"cilu sem zbral vse napake, ki sem jih naredil pri projektu. Hotel sem posneti oscilograme, vendar sem  ob tem skuril mikrokrmilnik. Zato oscilogramov v tem poro"cilu ni.
 
 
 
@@ -249,7 +249,7 @@ V poro"cilu sem morala zbrati vse napake, ki sem jih naredil pri projektu. Hotel
 	
 \subsection{Priklju"cek za napajanje}
 
-Ta napaka niti ni tako huda, je pa priporo"cljivo da se uporabi konektor katerega lahko odklopi"s, brez izvija"ca. Konektor katerega sem uporabil se vidi na desni strani slike~\ref{vezje2}.
+Ta napaka ni huda, je priporo"cljivo da se uporabi konektor katerega lahko odklopi"s, brez izvija"ca. Konektor katerega sem uporabil se vidi na desni strani slike~\ref{vezje2}.
 
 \subsection{Pull-down upori na gate-u MOS-FETa}
 
@@ -258,12 +258,12 @@ Pin mikrokrmilnika je bil direktno vezan na gate tranzistorja. Ob priklju"citvi 
 
 \subsection{Napaka v povezavi senzorja z vezjem}
 
-V poglavju \ref{shema}, sem "ze opisal zamenjavo impedanc med paroma ure (CLK) in podatka (DAT). To napako sem na"sel na koncu, ko mi komunikacija s senzorjem ni delovala in sem se posvetil branju "\mbox{datasheet-a}"~senzorja RM44SI. Opazil sem, da je potrebno pri izhodnih signalih senzorja vezati 120$\mathrm{\Omega}$ upor in kondenzator, kar sem popravil. "Se ena napaka, ki me je nau"cila naj dobro berem vse podatkovne listine.
+V poglavju \ref{shema}, sem "ze opisal zamenjavo impedanc med paroma ure (CLK) in podatka (DAT). To napako sem na"sel na koncu, ko mi komunikacija s senzorjem ni delovala in sem se posvetil branju "\mbox{datasheet-a}"~senzorja RM44SI. Opazil sem, da je potrebno pri izhodnih signalih senzorja vezati 120$\mathrm{\Omega}$ upor in kondenzator, kar sem popravil. Napaka, ki me je nau"cila naj dobro berem vse podatkovne listine.
 
 
 \subsection{Postavitev potenciometra poleg JTAG konektorja}
 
-Na sliki~\ref{vezje1}, prav tako na sliki~\ref{vezje2} se vidi da potenciometer ni lepo prispajkan. Razlog je v tem, ker sem ga na tiskanini postavil preblizu konektorja JTAG. Ko sem "zelel povezati tiskanino z ra"cunalnikom, ni bilo prostora za nasaditev priklju"cka. Potenciometer sem moral tako zamakniti, da sem lahko uporabil konektor. Ob kon"cnem izdelku to niti ni napaka, saj konektor slu"zi le za povezavo z ra"cunalnikom v "casu razvijanja programa. Ja pa to "sola za naprej, da si ob konektorjih pustim dovolj prostora. Napaka pa je bila popolnoma nepotrebna, "ce bi bil dosleden.
+Na sliki~\ref{vezje1}, prav tako na sliki~\ref{vezje2} se vidi, da potenciometer ni lepo prispajkan. Razlog je v tem, ker sem ga na tiskanini postavil preblizu konektorja JTAG. Ko sem "zelel povezati tiskanino z ra"cunalnikom, ni bilo prostora za nasaditev priklju"cka. Potenciometer sem moral tako zamakniti, da sem lahko uporabil konektor. Na koncu seminarja povezava s ra"cunalnikom nebi bila potrebna in bi lahko potenciometer lepo prispajkal na tiskanino. Napaka pa je bila popolnoma nepotrebna, "ce bi bil dosleden.
 
 \subsection{Zamenjana vhoda na od"stevalniku}
 
@@ -271,7 +271,7 @@ Napaka, ki bi jo moral hitro opazi "ze na shemi. Povezavi na vhodu oja"cevalnika
 
 \subsection{Narobe konfigurirani pini na DAC-u}
 
-Na DAC-u sem levi strani pinov pripisal napa"cne "designatorje". Na levi strani sem jih o"stevil"cil od zgoraj navzol. Na "footprint-u" pa o"stevil"cenje pinov na levi strani,  poteka od spodaj navzgor. To napako bi lahko popravil "ce bi spremenil oznake "designatorjev", ali "se la"zje v nastavitvah Pin~Map bi lahko posameznemu pinu na shemi priredil pin na "footprint-u".
+Na DAC-u sem levi strani pinov pripisal napa"cne "designatorje". Na levi strani sem jih o"stevil"cil od zgoraj navzol. Na "footprint-u"~pa o"stevil"cenje pinov na levi strani,  poteka od spodaj navzgor. To napako bi lahko popravil, "ce bi spremenil oznake "designatorjev", ali "se la"zje v nastavitvah Pin~Map, bi posameznemu pinu na shemi priredil pin na "footprint-u".
 
 \subsection{Napa"cna vrednost referen"cne napetosti}
 
@@ -281,7 +281,14 @@ Ob koncu projekta sem ugotovil, da moja referen"cna napetost (4,096~V), ni bila 
 \section{Zaklju"cek}
 
 
-	V projektu sem ustvaril lepo zbirko napak. Ve"c ali manj jih je bilo proizvedenih med izdelavo sheme, katere sem se lotil zelo lahkotno. Ta lahkotna misel pri sestavi sheme, me je pripeljala do neuspe"snega zaklju"cka. S tem projektom sem se po mojem mnenju na nekoliko bole"c na"cin npridobil dosti ve"c novega znanja in bom zato v prihodnosti bolj dosleden. 
+	V projektu sem ustvaril lepo zbirko napak. Ve"c ali manj jih je bilo proizvedenih med izdelavo sheme, katere sem se lotil zelo lahkotno. Ta lahkotna misel pri sestavi sheme, me je pripeljala do neuspe"snega zaklju"cka. S tem projektom sem si po mojem mnenju na nekoliko bole"c na"cin pridobil dosti ve"c novega znanja in bom zato v prihodnosti bolj dosleden. 
+	
+\begin{thebibliography}{1}
+
+\bibitem[1]{prajndl}"Z.~Prajndl, {\em Seminar iz mehatronike- Digitalni merilnik hitrosti}, \hskip 1em plus 0.5em minus 0.4em \relax LRTME, Univerza v Ljubljani, 2016
+
+\end{thebibliography}	
+	
 \newpage
 
 \pagestyle{empty}
